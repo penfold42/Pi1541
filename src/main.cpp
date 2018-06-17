@@ -363,6 +363,7 @@ void UpdateScreen()
 	bool oldATN = false;
 	bool oldDATA = false;
 	bool oldCLOCK = false;
+	bool oldRESET = false;
 
 	u32 oldTrack = 0;
 	u32 textColour = COLOUR_BLACK;
@@ -391,6 +392,7 @@ void UpdateScreen()
 	{
 		bool value;
 		u32 y = screen.ScaleY(STATUS_BAR_POSITION_Y);
+		u32 y20 = screen.ScaleY(STATUS_BAR_POSITION_Y - 20);
 
 		//RPI_UpdateTouch();
 		//refreshUartStatusDisplay = false;
@@ -433,7 +435,7 @@ void UpdateScreen()
 		{
 			oldATN = value;
 			snprintf(tempBuffer, tempBufferSize, "%d", value);
-			screen.PrintText(false, 29 * 8, y, tempBuffer, textColour, bgColour);
+			screen.PrintText(false, 18 * 8, y, tempBuffer, textColour, bgColour);
 			//refreshUartStatusDisplay = true;
 		}
 
@@ -456,7 +458,7 @@ void UpdateScreen()
 		{
 			oldDATA = value;
 			snprintf(tempBuffer, tempBufferSize, "%d", value);
-			screen.PrintText(false, 35 * 8, y, tempBuffer, textColour, bgColour);
+			screen.PrintText(false, 24 * 8, y, tempBuffer, textColour, bgColour);
 			//refreshUartStatusDisplay = true;
 		}
 
@@ -479,7 +481,16 @@ void UpdateScreen()
 		{
 			oldCLOCK = value;
 			snprintf(tempBuffer, tempBufferSize, "%d", value);
-			screen.PrintText(false, 41 * 8, y, tempBuffer, textColour, bgColour);
+			screen.PrintText(false, 30 * 8, y, tempBuffer, textColour, bgColour);
+			//refreshUartStatusDisplay = true;
+		}
+
+		value = IEC_Bus::GetPI_Reset();
+		if (value != oldRESET)
+		{
+			oldRESET = value;
+			snprintf(tempBuffer, tempBufferSize, "%d", value);
+			screen.PrintText(false, 36 * 8, y, tempBuffer, textColour, bgColour);
 			//refreshUartStatusDisplay = true;
 		}
 
@@ -490,7 +501,7 @@ void UpdateScreen()
 		{
 			oldTrack = track;
 			snprintf(tempBuffer, tempBufferSize, "%02d.%d", (oldTrack >> 1) + 1, oldTrack & 1 ? 5 : 0);
-			screen.PrintText(false, 20 * 8, y, tempBuffer, textColour, bgColour);
+			screen.PrintText(false, 6 * 8, y20, tempBuffer, textColour, bgColour);
 			//refreshUartStatusDisplay = true;
 
 			if (screenLCD)
