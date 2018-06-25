@@ -35,6 +35,7 @@ extern "C"
 #define PNG_WIDTH 320
 #define PNG_HEIGHT 200
 
+extern Options options;
 
 unsigned char FileBrowser::LSTBuffer[FileBrowser::LSTBuffer_size];
 
@@ -865,6 +866,9 @@ void FileBrowser::UpdateInputDiskCaddy()
 
 void FileBrowser::DisplayLedMotorStatusBar()
 {
+	u32 textColour = palette[VIC2_COLOUR_INDEX_LBLUE];
+	u32 bgColour = palette[VIC2_COLOUR_INDEX_BLUE];
+
 	u32 x = 0;
 	u32 y = screenMain->ScaleY(STATUS_BAR_POSITION_Y);
 
@@ -872,12 +876,15 @@ void FileBrowser::DisplayLedMotorStatusBar()
 	snprintf(bufferOut, 256, "LED 0 Motor 0 Track 00.0");
 	screenMain->PrintText(false, x, y, bufferOut, RGBA(0, 0, 0, 0xff), RGBA(0xff, 0xff, 0xff, 0xff));
 
-	snprintf(bufferOut, 256, "ATN ?");
-	screenMain->PrintText(false, 0, screenMain->GetTopAtnGraph(), bufferOut, RGBA(0, 0, 0, 0xff), RGBA(0xff, 0xff, 0xff, 0xff));
-	snprintf(bufferOut, 256, "DAT ?");
-	screenMain->PrintText(false, 0, screenMain->GetTopDatGraph(), bufferOut, RGBA(0, 0, 0, 0xff), RGBA(0xff, 0xff, 0xff, 0xff));
-	snprintf(bufferOut, 256, "CLK ?");
-	screenMain->PrintText(false, 0, screenMain->GetTopClkGraph(), bufferOut, RGBA(0, 0, 0, 0xff), RGBA(0xff, 0xff, 0xff, 0xff));
+	if (options.GraphIEC())
+	{
+		snprintf(bufferOut, 256, "ATN ?");
+		screenMain->PrintText(false, 0, screenMain->GetTopAtnGraph(), bufferOut, textColour, bgColour);
+		snprintf(bufferOut, 256, "DAT ?");
+		screenMain->PrintText(false, 0, screenMain->GetTopDatGraph(), bufferOut, textColour, bgColour);
+		snprintf(bufferOut, 256, "CLK ?");
+		screenMain->PrintText(false, 0, screenMain->GetTopClkGraph(), bufferOut, textColour, bgColour);
+	}
 }
 
 void FileBrowser::ClearScreen()
@@ -902,7 +909,7 @@ void FileBrowser::ShowDeviceAndROM()
 	u32 x = 0; // 43 * 8
 	u32 y = screenMain->ScaleY(STATUS_BAR_POSITION_Y) - 20;
 
-	snprintf(buffer, 256, "Device %d %s\r\n", deviceID, roms->ROMNames[roms->currentROMIndex]);
+	snprintf(buffer, 256, "Device %2d %s\r\n", deviceID, roms->ROMNames[roms->currentROMIndex]);
 	screenMain->PrintText(false, x, y, buffer, textColour, bgColour);
 }
 
