@@ -142,7 +142,7 @@ public:
 	void RefeshDisplay();
 	void DisplayDiskInfo(DiskImage* diskImage, const char* filenameForIcon);
 
-	void DisplayStatusBar();
+	void DisplayLedMotorStatusBar();
 
 	void FolderChanged();
 	void PopFolder();

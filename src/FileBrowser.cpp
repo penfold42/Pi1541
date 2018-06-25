@@ -519,7 +519,7 @@ void FileBrowser::RefeshDisplay()
 	caddySelections.RefreshViews();
 
 	DisplayPNG();
-	DisplayStatusBar();
+	DisplayLedMotorStatusBar();
 }
 
 bool FileBrowser::CheckForPNG(const char* filename, FILINFO& filIcon)
@@ -863,14 +863,21 @@ void FileBrowser::UpdateInputDiskCaddy()
 	if (dirty) RefeshDisplay();
 }
 
-void FileBrowser::DisplayStatusBar()
+void FileBrowser::DisplayLedMotorStatusBar()
 {
 	u32 x = 0;
 	u32 y = screenMain->ScaleY(STATUS_BAR_POSITION_Y);
 
 	char bufferOut[128];
-	snprintf(bufferOut, 256, "LED 0 Motor 0 Track 00.0 ATN 0 DAT 0 CLK 0");
+	snprintf(bufferOut, 256, "LED 0 Motor 0 Track 00.0");
 	screenMain->PrintText(false, x, y, bufferOut, RGBA(0, 0, 0, 0xff), RGBA(0xff, 0xff, 0xff, 0xff));
+
+	snprintf(bufferOut, 256, "ATN ?");
+	screenMain->PrintText(false, 0, screenMain->GetTopAtnGraph(), bufferOut, RGBA(0, 0, 0, 0xff), RGBA(0xff, 0xff, 0xff, 0xff));
+	snprintf(bufferOut, 256, "DAT ?");
+	screenMain->PrintText(false, 0, screenMain->GetTopDatGraph(), bufferOut, RGBA(0, 0, 0, 0xff), RGBA(0xff, 0xff, 0xff, 0xff));
+	snprintf(bufferOut, 256, "CLK ?");
+	screenMain->PrintText(false, 0, screenMain->GetTopClkGraph(), bufferOut, RGBA(0, 0, 0, 0xff), RGBA(0xff, 0xff, 0xff, 0xff));
 }
 
 void FileBrowser::ClearScreen()
@@ -893,7 +900,7 @@ void FileBrowser::ShowDeviceAndROM()
 	u32 textColour = RGBA(0, 0, 0, 0xff);
 	u32 bgColour = RGBA(0xff, 0xff, 0xff, 0xff);
 	u32 x = 0; // 43 * 8
-	u32 y = screenMain->ScaleY(STATUS_BAR_POSITION_Y - 20);
+	u32 y = screenMain->ScaleY(STATUS_BAR_POSITION_Y) - 20;
 
 	snprintf(buffer, 256, "Device %d %s\r\n", deviceID, roms->ROMNames[roms->currentROMIndex]);
 	screenMain->PrintText(false, x, y, buffer, textColour, bgColour);
@@ -1065,7 +1072,7 @@ void FileBrowser::DisplayDiskInfo(DiskImage* diskImage, const char* filenameForI
 		y += fontHeight;
 	}
 
-	DisplayStatusBar();
+	DisplayLedMotorStatusBar();
 
 	if (filenameForIcon)
 	{

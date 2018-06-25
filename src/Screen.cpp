@@ -58,6 +58,14 @@ void Screen::Open(u32 widthDesired, u32 heightDesired, u32 colourDepth)
 	scaleX = (float)widthDesired / 1024.0f;
 	scaleY = (float)heightDesired / 768.0f;
 
+	graphHeight = ScaleY(20);
+	if (graphHeight < 16) graphHeight = 16;
+
+	topGraphArea = heightDesired-1-3*graphHeight;
+	topAtnGraph = topGraphArea + 1;
+	topDatGraph = topGraphArea + 1 + graphHeight;
+	topClkGraph = topGraphArea + 1 + 2*graphHeight;
+
 	RPI_PropertyInit();
 	RPI_PropertyAddTag(TAG_GET_PHYSICAL_SIZE);
 	RPI_PropertyAddTag(TAG_GET_VIRTUAL_SIZE);

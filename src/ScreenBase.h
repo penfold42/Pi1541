@@ -68,6 +68,11 @@ public:
 
 	virtual u32 GetFontHeight() = 0;
 
+	virtual int GetTopGraphArea() const { return 0; }
+	virtual int GetTopAtnGraph() const { return 0; }
+	virtual int GetTopDatGraph() const { return 0; }
+	virtual int GetTopClkGraph() const { return 0; }
+
 	virtual void SwapBuffers() = 0;
 
 	bool IsMonocrome() const { return bpp == 1; }

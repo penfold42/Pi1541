@@ -50,6 +50,12 @@ public:
 	float GetScaleX() const { return scaleX; }
 	float GetScaleY() const { return scaleY; }
 
+	int GetGraphHeight() const { return graphHeight; }
+	int GetTopGraphArea() const { return topGraphArea; }
+	int GetTopAtnGraph() const { return topAtnGraph; }
+	int GetTopDatGraph() const { return topDatGraph; }
+	int GetTopClkGraph() const { return topClkGraph; }
+
 	u32 ScaleX(u32 x) { return (u32)((float)x * scaleX); }
 	u32 ScaleY(u32 y) { return (u32)((float)y * scaleY); }
 
@@ -69,6 +75,12 @@ private:
 
 	float scaleX;
 	float scaleY;
+
+	int graphHeight;
+	int topGraphArea;
+	int topAtnGraph;
+	int topDatGraph;
+	int topClkGraph;
 };
 
 #endif

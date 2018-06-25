@@ -398,19 +398,17 @@ void UpdateScreen()
 	RGBA atnColour = COLOUR_YELLOW;
 	RGBA BkColour = FileBrowser::Colour(VIC2_COLOUR_INDEX_BLUE);
 
-	int height = screen.ScaleY(60);
-	int screenHeight = screen.Height();
-	int screenWidthM1 = screen.Width() - 1;
-	int top, top2, top3;
-	int bottom;
-	int graphX = 0;
+	#define graphIndicatorX	32			// where is the 'n' in ATN n
+	#define graphXStart	48			// allow for 'ATN n '
+	int graphXEnd = screen.Width() - 1;
+	int graphX = graphXStart;
 	//bool refreshUartStatusDisplay;
 
-	top = screenHeight - height / 2;
-	bottom = screenHeight - 1;
-
-	top2 = top - (bottom - top);
-	top3 = top2 - (bottom - top);
+	int graphHeight = screen.GetGraphHeight();
+	int topGraphArea = screen.GetTopGraphArea();
+	int topAtnGraph = screen.GetTopAtnGraph();
+	int topDatGraph = screen.GetTopDatGraph();
+	int topClkGraph = screen.GetTopClkGraph();
 
 	while (1)
 	{
@@ -442,61 +440,65 @@ void UpdateScreen()
 		value = IEC_Bus::GetPI_Atn();
 		if (options.GraphIEC())
 		{
-			bottom = top2 - 2;
+			int bottom = topAtnGraph + graphHeight - 2;
 			if (value ^ oldATN)
 			{
-				screen.DrawLineV(graphX, top3, bottom, atnColour);
+				screen.DrawLineV(graphX, topAtnGraph, bottom, atnColour);
 			}
 			else
 			{
-				screen.DrawLineV(graphX, top3, bottom, BkColour);
-				if (value) screen.PlotPixel(graphX, top3, atnColour);
-				else screen.PlotPixel(graphX, bottom, atnColour);
+				screen.DrawLineV(graphX, topAtnGraph, bottom, BkColour);
+				if (value)
+					screen.PlotPixel(graphX, topAtnGraph, atnColour);
+				else
+					screen.PlotPixel(graphX, bottom, atnColour);
 			}
 		}
 		if (value != oldATN)
 		{
 			oldATN = value;
 			snprintf(tempBuffer, tempBufferSize, "%d", value);
-			screen.PrintText(false, 29 * 8, y, tempBuffer, textColour, bgColour);
+			screen.PrintText(false, graphIndicatorX, topAtnGraph, tempBuffer, textColour, bgColour);
 			//refreshUartStatusDisplay = true;
 		}
 
 		value = IEC_Bus::GetPI_Data();
 		if (options.GraphIEC())
 		{
-			bottom = top - 2;
+			int bottom = topDatGraph + graphHeight - 2;
 			if (value ^ oldDATA)
 			{
-				screen.DrawLineV(graphX, top2, bottom, dataColour);
+				screen.DrawLineV(graphX, topDatGraph, bottom, dataColour);
 			}
 			else
 			{
-				screen.DrawLineV(graphX, top2, bottom, BkColour);
-				if (value) screen.PlotPixel(graphX, top2, dataColour);
-				else screen.PlotPixel(graphX, bottom, dataColour);
+				screen.DrawLineV(graphX, topDatGraph, bottom, BkColour);
+				if (value)
+					screen.PlotPixel(graphX, topDatGraph, dataColour);
+				else
+					screen.PlotPixel(graphX, bottom, dataColour);
 			}
 		}
 		if (value != oldDATA)
 		{
 			oldDATA = value;
 			snprintf(tempBuffer, tempBufferSize, "%d", value);
-			screen.PrintText(false, 35 * 8, y, tempBuffer, textColour, bgColour);
+			screen.PrintText(false, graphIndicatorX, topDatGraph, tempBuffer, textColour, bgColour);
 			//refreshUartStatusDisplay = true;
 		}
 
 		value = IEC_Bus::GetPI_Clock();
 		if (options.GraphIEC())
 		{
-			bottom = screenHeight - 1;
+			int bottom = topClkGraph + graphHeight - 2;
 			if (value ^ oldCLOCK)
 			{
-				screen.DrawLineV(graphX, top, bottom, clockColour);
+				screen.DrawLineV(graphX, topClkGraph, bottom, clockColour);
 			}
 			else
 			{
-				screen.DrawLineV(graphX, top, bottom, BkColour);
-				if (value) screen.PlotPixel(graphX, top, clockColour);
+				screen.DrawLineV(graphX, topClkGraph, bottom, BkColour);
+				if (value) screen.PlotPixel(graphX, topClkGraph, clockColour);
 				else screen.PlotPixel(graphX, bottom, clockColour);
 			}
 		}
@@ -504,11 +506,11 @@ void UpdateScreen()
 		{
 			oldCLOCK = value;
 			snprintf(tempBuffer, tempBufferSize, "%d", value);
-			screen.PrintText(false, 41 * 8, y, tempBuffer, textColour, bgColour);
+			screen.PrintText(false, graphIndicatorX, topClkGraph, tempBuffer, textColour, bgColour);
 			//refreshUartStatusDisplay = true;
 		}
 
-		if (graphX++ > screenWidthM1) graphX = 0;
+		if (++graphX > graphXEnd) graphX = graphXStart;
 
 		u32 track = pi1541.drive.Track();
 		if (track != oldTrack)
