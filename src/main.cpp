@@ -433,7 +433,7 @@ void UpdateScreen()
 		{
 			oldMotor = value;
 			snprintf(tempBuffer, tempBufferSize, "%d", value);
-			screen.PrintText(false, 12 * 8, y, tempBuffer, textColour, bgColour);
+			screen.PrintText(true, 12 * 8, y, tempBuffer, textColour, bgColour);
 			//refreshUartStatusDisplay = true;
 		}
 
@@ -517,7 +517,7 @@ void UpdateScreen()
 		{
 			oldTrack = track;
 			snprintf(tempBuffer, tempBufferSize, "%02d.%d", (oldTrack >> 1) + 1, oldTrack & 1 ? 5 : 0);
-			screen.PrintText(false, 20 * 8, y, tempBuffer, textColour, bgColour);
+			screen.PrintText(true, 20 * 8, y, tempBuffer, textColour, bgColour);
 			//refreshUartStatusDisplay = true;
 
 			if (screenLCD)
