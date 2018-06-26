@@ -221,7 +221,7 @@ static char vga2screen(char c)
 	return c;
 }
 
-void Screen::WriteChar(bool petscii, u32 x, u32 y, unsigned char c, RGBA colour)
+void Screen::WriteChar(bool petscii, u8 fontPx, u32 x, u32 y, unsigned char c, RGBA colour)
 {
 	if (opened)
 	{
@@ -297,7 +297,7 @@ void Screen::DrawLineV(u32 x, u32 y1, u32 y2, RGBA colour)
 	}
 }
 
-u32 Screen::PrintText(bool petscii, u32 x, u32 y, char *ptr, RGBA TxtColour, RGBA BkColour, bool measureOnly, u32* width, u32* height)
+u32 Screen::PrintText(bool petscii, u8 fontPx, u32 x, u32 y, char *ptr, RGBA TxtColour, RGBA BkColour, bool measureOnly, u32* width, u32* height)
 {
 	int xCursor = x;
 	int yCursor = y;
@@ -317,7 +317,7 @@ u32 Screen::PrintText(bool petscii, u32 x, u32 y, char *ptr, RGBA TxtColour, RGB
 			if (!measureOnly)
 			{
 				ClearArea(xCursor, yCursor, xCursor + BitFontWth, yCursor + fontHeight, BkColour);
-				WriteChar(petscii, xCursor, yCursor, c, TxtColour);
+				WriteChar(petscii, fontPx, xCursor, yCursor, c, TxtColour);
 			}
 			xCursor += BitFontWth;
 			if (width) *width = MAX(*width, (u32)MAX(0, xCursor));
@@ -334,9 +334,9 @@ u32 Screen::PrintText(bool petscii, u32 x, u32 y, char *ptr, RGBA TxtColour, RGB
 	return len;
 }
 
-u32 Screen::MeasureText(bool petscii, char *ptr, u32* width, u32* height)
+u32 Screen::MeasureText(bool petscii, u8 fontPx, char *ptr, u32* width, u32* height)
 {
-	return PrintText(petscii, 0, 0, ptr, 0, 0, true, width, height);
+	return PrintText(petscii, fontPx, 0, 0, ptr, 0, 0, true, width, height);
 }
 
 void Screen::PlotImage(u32* image, int x, int y, int w, int h)

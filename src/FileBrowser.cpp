@@ -124,7 +124,7 @@ void FileBrowser::BrowsableListView::Refresh()
 			{
 				if (entry->filImage.fattrib & AM_DIR)
 				{
-					screen->PrintText(false, x, y, buffer1, palette[VIC2_COLOUR_INDEX_LBLUE], RGBA(0xff, 0xff, 0xff, 0xff));
+					screen->PrintText(false, 16, x, y, buffer1, palette[VIC2_COLOUR_INDEX_LBLUE], RGBA(0xff, 0xff, 0xff, 0xff));
 				}
 				else
 				{
@@ -132,28 +132,28 @@ void FileBrowser::BrowsableListView::Refresh()
 					if (entry->filImage.fattrib & AM_RDO)
 						colour = palette[VIC2_COLOUR_INDEX_RED];
 
-					screen->PrintText(false, x, y, buffer1, colour, RGBA(0xff, 0xff, 0xff, 0xff));
+					screen->PrintText(false, 16, x, y, buffer1, colour, RGBA(0xff, 0xff, 0xff, 0xff));
 				}
 			}
 			else
 			{
 				if (entry->filImage.fattrib & AM_DIR)
 				{
-					screen->PrintText(false, x, y, buffer1, palette[VIC2_COLOUR_INDEX_LBLUE], BkColour);
+					screen->PrintText(false, 16, x, y, buffer1, palette[VIC2_COLOUR_INDEX_LBLUE], BkColour);
 				}
 				else
 				{
 					colour = palette[VIC2_COLOUR_INDEX_LGREY];
 					if (entry->filImage.fattrib & AM_RDO)
 						colour = palette[VIC2_COLOUR_INDEX_PINK];
-					screen->PrintText(false, x, y, buffer1, colour, BkColour);
+					screen->PrintText(false, 16, x, y, buffer1, colour, BkColour);
 				}
 			}
 		}
 		else
 		{
 			memset(buffer1, ' ', 80);
-			screen->PrintText(false, x, y, buffer1, BkColour, BkColour);
+			screen->PrintText(false, 16, x, y, buffer1, BkColour, BkColour);
 		}
 		y += 16;
 	}
@@ -456,7 +456,7 @@ void FileBrowser::RefeshDisplayForBrowsableList(FileBrowser::BrowsableList* brow
 				{
 					if (terminal)
 						printf("\E[34;47m%s\E[0m\r\n", buffer1);
-					screenMain->PrintText(false, x, y, buffer1, palette[VIC2_COLOUR_INDEX_LBLUE], RGBA(0xff, 0xff, 0xff, 0xff));
+					screenMain->PrintText(false, 16, x, y, buffer1, palette[VIC2_COLOUR_INDEX_LBLUE], RGBA(0xff, 0xff, 0xff, 0xff));
 				}
 				else
 				{
@@ -464,7 +464,7 @@ void FileBrowser::RefeshDisplayForBrowsableList(FileBrowser::BrowsableList* brow
 					if (entry->filImage.fattrib & AM_RDO)
 						colour = palette[VIC2_COLOUR_INDEX_RED];
 
-					screenMain->PrintText(false, x, y, buffer1, colour, RGBA(0xff, 0xff, 0xff, 0xff));
+					screenMain->PrintText(false, 16, x, y, buffer1, colour, RGBA(0xff, 0xff, 0xff, 0xff));
 					if (terminal)
 						printf("\E[31;47m%s\E[0m\r\n", buffer1);
 				}
@@ -473,7 +473,7 @@ void FileBrowser::RefeshDisplayForBrowsableList(FileBrowser::BrowsableList* brow
 			{
 				if (entry->filImage.fattrib & AM_DIR)
 				{
-					screenMain->PrintText(false, x, y, buffer1, palette[VIC2_COLOUR_INDEX_LBLUE], BkColour);
+					screenMain->PrintText(false, 16, x, y, buffer1, palette[VIC2_COLOUR_INDEX_LBLUE], BkColour);
 					if (terminal)
 						printf("\E[34m%s\E[0m\r\n", buffer1);
 				}
@@ -482,7 +482,7 @@ void FileBrowser::RefeshDisplayForBrowsableList(FileBrowser::BrowsableList* brow
 					colour = palette[VIC2_COLOUR_INDEX_LGREY];
 					if (entry->filImage.fattrib & AM_RDO)
 						colour = palette[VIC2_COLOUR_INDEX_PINK];
-					screenMain->PrintText(false, x, y, buffer1, colour, BkColour);
+					screenMain->PrintText(false, 16, x, y, buffer1, colour, BkColour);
 					if (terminal)
 						printf("\E[0;m%s\E[0m\r\n", buffer1);
 				}
@@ -491,7 +491,7 @@ void FileBrowser::RefeshDisplayForBrowsableList(FileBrowser::BrowsableList* brow
 		else
 		{
 			memset(buffer1, ' ', 80);
-			screenMain->PrintText(false, x, y, buffer1, BkColour, BkColour);
+			screenMain->PrintText(false, 16, x, y, buffer1, BkColour, BkColour);
 			if (terminal)
 				printf("%s\r\n", buffer1);
 		}
@@ -509,7 +509,7 @@ void FileBrowser::RefeshDisplay()
 		u32 bgColour = Colour(VIC2_COLOUR_INDEX_GREY);
 			
 		screenMain->ClearArea(0, 0, (int)screenMain->Width(), 17, bgColour);
-		screenMain->PrintText(false, 0, 0, buffer, textColour, bgColour);
+		screenMain->PrintText(false, 16, 0, 0, buffer, textColour, bgColour);
 	}
 
 	//u32 offsetX = screenMain->ScaleX(1024 - 320);
@@ -874,17 +874,17 @@ void FileBrowser::DisplayLedMotorStatusBar()
 
 	char bufferOut[128];
 	snprintf(bufferOut, 256, "LED 0 Motor 0 Track 00.0");
-//	screenMain->PrintText(false, x, y, bufferOut, RGBA(0, 0, 0, 0xff), RGBA(0xff, 0xff, 0xff, 0xff));
-	screenMain->PrintText(true, x, y, bufferOut, RGBA(0, 0, 0, 0xff), RGBA(0xff, 0xff, 0xff, 0xff));
+//	screenMain->PrintText(false, 16, x, y, bufferOut, RGBA(0, 0, 0, 0xff), RGBA(0xff, 0xff, 0xff, 0xff));
+	screenMain->PrintText(true, 16, x, y, bufferOut, RGBA(0, 0, 0, 0xff), RGBA(0xff, 0xff, 0xff, 0xff));
 
 	if (options.GraphIEC())
 	{
 		snprintf(bufferOut, 256, "ATN ?");
-		screenMain->PrintText(true, 0, screenMain->GetTopAtnGraph(), bufferOut, textColour, bgColour);
+		screenMain->PrintText(true, 16, 0, screenMain->GetTopAtnGraph(), bufferOut, textColour, bgColour);
 		snprintf(bufferOut, 256, "DAT ?");
-		screenMain->PrintText(true, 0, screenMain->GetTopDatGraph(), bufferOut, textColour, bgColour);
+		screenMain->PrintText(true, 16, 0, screenMain->GetTopDatGraph(), bufferOut, textColour, bgColour);
 		snprintf(bufferOut, 256, "CLK ?");
-		screenMain->PrintText(true, 0, screenMain->GetTopClkGraph(), bufferOut, textColour, bgColour);
+		screenMain->PrintText(true, 16, 0, screenMain->GetTopClkGraph(), bufferOut, textColour, bgColour);
 	}
 }
 
@@ -911,8 +911,8 @@ void FileBrowser::ShowDeviceAndROM()
 	u32 y = screenMain->GetDeviceAndRomY();
 
 	snprintf(buffer, 256, "Device %2d %s\r\n", deviceID, roms->ROMNames[roms->currentROMIndex]);
-//	screenMain->PrintText(false, x, y, buffer, textColour, bgColour);
-	screenMain->PrintText(true, x, y, buffer, textColour, bgColour);
+//	screenMain->PrintText(false, 16, x, y, buffer, textColour, bgColour);
+	screenMain->PrintText(true, 16, x, y, buffer, textColour, bgColour);
 }
 
 void FileBrowser::DisplayDiskInfo(DiskImage* diskImage, const char* filenameForIcon)
@@ -972,12 +972,12 @@ void FileBrowser::DisplayDiskInfo(DiskImage* diskImage, const char* filenameForI
 				if (!used)
 				{
 					snprintf(bufferOut, 128, "%c", screen2petscii(87));
-					screenMain->PrintText(true, x, y, bufferOut, usedColour, bgColour);
+					screenMain->PrintText(true, 16, x, y, bufferOut, usedColour, bgColour);
 				}
 				else
 				{
 					snprintf(bufferOut, 128, "%c", screen2petscii(81));
-					screenMain->PrintText(true, x, y, bufferOut, freeColour, bgColour);
+					screenMain->PrintText(true, 16, x, y, bufferOut, freeColour, bgColour);
 				}
 				x += 8;
 				bits <<= 1;
@@ -990,7 +990,7 @@ void FileBrowser::DisplayDiskInfo(DiskImage* diskImage, const char* filenameForI
 			for (int bit = 0; bit < DiskImage::SectorsPerTrack[bamTrack]; bit++)
 			{
 				snprintf(bufferOut, 128, "%c", screen2petscii(87));
-				screenMain->PrintText(true, x, y, bufferOut, usedColour, bgColour);
+				screenMain->PrintText(true, 16, x, y, bufferOut, usedColour, bgColour);
 				x += 8;
 			}
 			y += fontHeight;
@@ -998,10 +998,10 @@ void FileBrowser::DisplayDiskInfo(DiskImage* diskImage, const char* filenameForI
 		x = 0;
 		y = 0;
 		snprintf(bufferOut, 128, "0");
-		screenMain->PrintText(true, x, y, bufferOut, textColour, bgColour);
+		screenMain->PrintText(true, 16, x, y, bufferOut, textColour, bgColour);
 		x = 16;
 		snprintf(bufferOut, 128, "\"%s\" %c%c%c%c%c%c", name, buffer[162], buffer[163], buffer[164], buffer[165], buffer[166], buffer[167]);
-		screenMain->PrintText(true, x, y, bufferOut, bgColour, textColour);
+		screenMain->PrintText(true, 16, x, y, bufferOut, bgColour, textColour);
 		x = 0;
 		y += fontHeight;
 
@@ -1050,10 +1050,10 @@ void FileBrowser::DisplayDiskInfo(DiskImage* diskImage, const char* filenameForI
 
 							//DEBUG_LOG("%d name = %s %x\r\n", blocks, name, fileType);
 							snprintf(bufferOut, 128, "%d", blocks);
-							screenMain->PrintText(true, x, y, bufferOut, textColour, bgColour);
+							screenMain->PrintText(true, 16, x, y, bufferOut, textColour, bgColour);
 							x += 5 * 8;
 							snprintf(bufferOut, 128, "\"%s\"", name);
-							screenMain->PrintText(true, x, y, bufferOut, textColour, bgColour);
+							screenMain->PrintText(true, 16, x, y, bufferOut, textColour, bgColour);
 							x += 19 * 8;
 							char modifier = 0x20;
 							if ((fileType & 0x80) == 0)
@@ -1061,7 +1061,7 @@ void FileBrowser::DisplayDiskInfo(DiskImage* diskImage, const char* filenameForI
 							else if (fileType & 0x40)
 								modifier = screen2petscii(60);
 							snprintf(bufferOut, 128, "%s%c", fileTypes[fileType & 7], modifier);
-							screenMain->PrintText(true, x, y, bufferOut, textColour, bgColour);
+							screenMain->PrintText(true, 16, x, y, bufferOut, textColour, bgColour);
 							y += fontHeight;
 						}
 						entryOffset += 32;
@@ -1077,7 +1077,7 @@ void FileBrowser::DisplayDiskInfo(DiskImage* diskImage, const char* filenameForI
 		x = 0;
 		//DEBUG_LOG("%d blocks free\r\n", blocksFree);
 		snprintf(bufferOut, 128, "%d BLOCKS FREE.\r\n", blocksFree);
-		screenMain->PrintText(true, x, y, bufferOut, textColour, bgColour);
+		screenMain->PrintText(true, 16, x, y, bufferOut, textColour, bgColour);
 		y += fontHeight;
 	}
 

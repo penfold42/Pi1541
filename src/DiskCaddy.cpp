@@ -50,7 +50,7 @@ bool DiskCaddy::Empty()
 				y = screen->ScaleY(screenPosYCaddySelections);
 
 				snprintf(buffer, 256, "Saving %s\r\n", disks[index].GetName());
-				screen->PrintText(false, x, y, buffer, RGBA(0xff, 0xff, 0xff, 0xff), red);
+				screen->PrintText(false, 16, x, y, buffer, RGBA(0xff, 0xff, 0xff, 0xff), red);
 			}
 
 			if (screenLCD)
@@ -61,10 +61,10 @@ bool DiskCaddy::Empty()
 				y = 0;
 
 				snprintf(buffer, 256, "Saving");
-				screenLCD->PrintText(false, x, y, buffer, RGBA(0xff, 0xff, 0xff, 0xff), BkColour);
+				screenLCD->PrintText(false, 16, x, y, buffer, RGBA(0xff, 0xff, 0xff, 0xff), BkColour);
 				y += 16;
 				snprintf(buffer, 256, "%s                ", disks[index].GetName());
-				screenLCD->PrintText(false, x, y, buffer, RGBA(0xff, 0xff, 0xff, 0xff), red);
+				screenLCD->PrintText(false, 16, x, y, buffer, RGBA(0xff, 0xff, 0xff, 0xff), red);
 				screenLCD->SwapBuffers();
 			}
 		}
@@ -79,7 +79,7 @@ bool DiskCaddy::Empty()
 			y = screen->ScaleY(screenPosYCaddySelections);
 
 			snprintf(buffer, 256, "Saving Complete             \r\n");
-			screen->PrintText(false, x, y, buffer, RGBA(0xff, 0xff, 0xff, 0xff), red);
+			screen->PrintText(false, 16, x, y, buffer, RGBA(0xff, 0xff, 0xff, 0xff), red);
 		}
 
 		if (screenLCD)
@@ -90,10 +90,10 @@ bool DiskCaddy::Empty()
 			y = 0;
 
 			snprintf(buffer, 256, "Saving");
-			screenLCD->PrintText(false, x, y, buffer, RGBA(0xff, 0xff, 0xff, 0xff), BkColour);
+			screenLCD->PrintText(false, 16, x, y, buffer, RGBA(0xff, 0xff, 0xff, 0xff), BkColour);
 			y += 16;
 			snprintf(buffer, 256, "Complete                ");
-			screenLCD->PrintText(false, x, y, buffer, RGBA(0xff, 0xff, 0xff, 0xff), red);
+			screenLCD->PrintText(false, 16, x, y, buffer, RGBA(0xff, 0xff, 0xff, 0xff), red);
 			screenLCD->SwapBuffers();
 		}
 	}
@@ -118,7 +118,7 @@ bool DiskCaddy::Insert(const FILINFO* fileInfo, bool readOnly)
 			y = screen->ScaleY(screenPosYCaddySelections);
 
 			snprintf(buffer, 256, "Loading %s\r\n", fileInfo->fname);
-			screen->PrintText(false, x, y, buffer, RGBA(0xff, 0xff, 0xff, 0xff), red);
+			screen->PrintText(false, 16, x, y, buffer, RGBA(0xff, 0xff, 0xff, 0xff), red);
 		}
 
 		if (screenLCD)
@@ -129,10 +129,10 @@ bool DiskCaddy::Insert(const FILINFO* fileInfo, bool readOnly)
 			y = 0;
 
 			snprintf(buffer, 256, "Loading");
-			screenLCD->PrintText(false, x, y, buffer, RGBA(0xff, 0xff, 0xff, 0xff), BkColour);
+			screenLCD->PrintText(false, 16, x, y, buffer, RGBA(0xff, 0xff, 0xff, 0xff), BkColour);
 			y += 16;
 			snprintf(buffer, 256, "%s                ", fileInfo->fname);
-			screenLCD->PrintText(false, x, y, buffer, RGBA(0xff, 0xff, 0xff, 0xff), red);
+			screenLCD->PrintText(false, 16, x, y, buffer, RGBA(0xff, 0xff, 0xff, 0xff), red);
 			screenLCD->SwapBuffers();
 		}
 
@@ -244,7 +244,7 @@ void DiskCaddy::Display()
 		y = screen->ScaleY(screenPosYCaddySelections);
 
 		snprintf(buffer, 256, "Emulating\r\n");
-		screen->PrintText(false, x, y, buffer, RGBA(0xff, 0xff, 0xff, 0xff), red);
+		screen->PrintText(false, 16, x, y, buffer, RGBA(0xff, 0xff, 0xff, 0xff), red);
 		y += 16;
 
 		for (caddyIndex = 0; caddyIndex < numberOfImages; ++caddyIndex)
@@ -254,7 +254,7 @@ void DiskCaddy::Display()
 			if (name)
 			{
 				snprintf(buffer, 256, "%d %s\r\n", caddyIndex + 1, name);
-				screen->PrintText(false, x, y, buffer, RGBA(0xff, 0xff, 0xff, 0xff), red);
+				screen->PrintText(false, 16, x, y, buffer, RGBA(0xff, 0xff, 0xff, 0xff), red);
 				y += 16;
 			}
 		}
@@ -277,7 +277,7 @@ void DiskCaddy::ShowSelectedImage(u32 index)
 		x = screen->ScaleX(screenPosXCaddySelections) - 16;
 		y = screen->ScaleY(screenPosYCaddySelections) + 16 + 16 * index;
 		snprintf(buffer, 256, "*");
-		screen->PrintText(false, x, y, buffer, white, red);
+		screen->PrintText(false, 16, x, y, buffer, white, red);
 	}
 	if (screenLCD)
 	{
@@ -293,7 +293,7 @@ void DiskCaddy::ShowSelectedImage(u32 index)
 
 			//snprintf(buffer, 256, "Emulating %d/%d           ", index + 1, numberOfImages);
 			snprintf(buffer, 256, "        D %d/%d           ", index + 1, numberOfImages);
-			screenLCD->PrintText(false, x, y, buffer, RGBA(0xff, 0xff, 0xff, 0xff), RGBA(0xff, 0xff, 0xff, 0xff));
+			screenLCD->PrintText(false, 16, x, y, buffer, RGBA(0xff, 0xff, 0xff, 0xff), RGBA(0xff, 0xff, 0xff, 0xff));
 			y += 16;
 
 			if (numberOfImages > 3 && index > 2)
@@ -315,7 +315,7 @@ void DiskCaddy::ShowSelectedImage(u32 index)
 				if (name)
 				{
 					snprintf(buffer, 256, "%d %s                 ", caddyIndex + 1, name);
-					screenLCD->PrintText(false, x, y, buffer, RGBA(0xff, 0xff, 0xff, 0xff), caddyIndex == index ? RGBA(0xff, 0xff, 0xff, 0xff) : BkColour);
+					screenLCD->PrintText(false, 16, x, y, buffer, RGBA(0xff, 0xff, 0xff, 0xff), caddyIndex == index ? RGBA(0xff, 0xff, 0xff, 0xff) : BkColour);
 					y += 16;
 				}
 				if (y >= screenLCD->Height())
@@ -338,7 +338,7 @@ bool DiskCaddy::Update()
 			x = screen->ScaleX(screenPosXCaddySelections) - 16;
 			y = screen->ScaleY(screenPosYCaddySelections) + 16 + 16 * oldCaddyIndex;
 			snprintf(buffer, 256, " ");
-			screen->PrintText(false, x, y, buffer, red, red);
+			screen->PrintText(false, 16, x, y, buffer, red, red);
 			oldCaddyIndex = caddyIndex;
 			ShowSelectedImage(oldCaddyIndex);
 		}

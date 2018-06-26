@@ -69,7 +69,7 @@ void ScreenLCD::SetContrast(u8 value)
 	ssd1306->SetContrast(value);
 }
 
-void ScreenLCD::WriteChar(bool petscii, u32 x, u32 y, unsigned char c, RGBA colour)
+void ScreenLCD::WriteChar(bool petscii, u8 fontPx, u32 x, u32 y, unsigned char c, RGBA colour)
 {
 	if (opened)
 	{
@@ -84,16 +84,16 @@ void ScreenLCD::PlotImage(u32* image, int x, int y, int w, int h)
 {
 }
 
-u32 ScreenLCD::PrintText(bool petscii, u32 x, u32 y, char *ptr, RGBA TxtColour, RGBA BkColour, bool measureOnly, u32* width, u32* height)
+u32 ScreenLCD::PrintText(bool petscii, u8 fontPx, u32 x, u32 y, char *ptr, RGBA TxtColour, RGBA BkColour, bool measureOnly, u32* width, u32* height)
 {
 	int len = 0;
 	ssd1306->Plottext(x >> 3, y >> 4, ptr, (BkColour & 0xffffff) != 0);
 	return len;
 }
 
-u32 ScreenLCD::MeasureText(bool petscii, char *ptr, u32* width, u32* height)
+u32 ScreenLCD::MeasureText(bool petscii, u8 fontPx, char *ptr, u32* width, u32* height)
 {
-	return PrintText(petscii, 0, 0, ptr, 0, 0, true, width, height);
+	return PrintText(petscii, fontPx, 0, 0, ptr, 0, 0, true, width, height);
 }
 
 u32 ScreenLCD::GetFontHeight()
