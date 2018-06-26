@@ -46,8 +46,6 @@
 
 #define FILEBROWSER_MAX_PNG_SIZE	0x10000
 
-#define STATUS_BAR_POSITION_Y (40 * 16 + 10)
-
 class FileBrowser
 {
 public:

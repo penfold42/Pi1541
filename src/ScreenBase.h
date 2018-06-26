@@ -72,6 +72,8 @@ public:
 	virtual int GetTopAtnGraph() const { return 0; }
 	virtual int GetTopDatGraph() const { return 0; }
 	virtual int GetTopClkGraph() const { return 0; }
+	int GetDriveLedStatusY() const { return DriveLedStatusY; }
+	int GetDeviceAndRomY() const {return DeviceAndRomY; }
 
 	virtual void SwapBuffers() = 0;
 
@@ -97,6 +99,16 @@ protected:
 	u32 bpp;
 	u32 pitch;
 	u8* framebuffer;
+
+	int graphHeight;
+	int topGraphArea;
+	int topAtnGraph;
+	int topDatGraph;
+	int topClkGraph;
+
+	int DriveLedStatusY;
+	int DeviceAndRomY;
+
 };
 
 #endif

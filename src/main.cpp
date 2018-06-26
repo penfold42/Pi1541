@@ -413,7 +413,7 @@ void UpdateScreen()
 	while (1)
 	{
 		bool value;
-		u32 y = screen.ScaleY(STATUS_BAR_POSITION_Y);
+		u32 y = screen.GetDriveLedStatusY();
 
 		//RPI_UpdateTouch();
 		//refreshUartStatusDisplay = false;
@@ -424,7 +424,7 @@ void UpdateScreen()
 //			SetACTLed(value);
 			oldLED = value;
 			snprintf(tempBuffer, tempBufferSize, "%d", value);
-			screen.PrintText(false, 4 * 8, y, tempBuffer, value ? COLOUR_RED : textColour, bgColour);
+			screen.PrintText(true, 4 * 8, y, tempBuffer, value ? COLOUR_RED : textColour, bgColour);
 			//refreshUartStatusDisplay = true;
 		}
 
@@ -458,7 +458,7 @@ void UpdateScreen()
 		{
 			oldATN = value;
 			snprintf(tempBuffer, tempBufferSize, "%d", value);
-			screen.PrintText(false, graphIndicatorX, topAtnGraph, tempBuffer, textColour, bgColour);
+			screen.PrintText(true, graphIndicatorX, topAtnGraph, tempBuffer, textColour, bgColour);
 			//refreshUartStatusDisplay = true;
 		}
 
@@ -483,7 +483,7 @@ void UpdateScreen()
 		{
 			oldDATA = value;
 			snprintf(tempBuffer, tempBufferSize, "%d", value);
-			screen.PrintText(false, graphIndicatorX, topDatGraph, tempBuffer, textColour, bgColour);
+			screen.PrintText(true, graphIndicatorX, topDatGraph, tempBuffer, textColour, bgColour);
 			//refreshUartStatusDisplay = true;
 		}
 
@@ -506,7 +506,7 @@ void UpdateScreen()
 		{
 			oldCLOCK = value;
 			snprintf(tempBuffer, tempBufferSize, "%d", value);
-			screen.PrintText(false, graphIndicatorX, topClkGraph, tempBuffer, textColour, bgColour);
+			screen.PrintText(true, graphIndicatorX, topClkGraph, tempBuffer, textColour, bgColour);
 			//refreshUartStatusDisplay = true;
 		}
 
@@ -1209,6 +1209,8 @@ extern "C"
 
 
 		CheckOptions();
+
+		screen.UpdateLayout();
 
 		IEC_Bus::SetSplitIECLines(options.SplitIECLines());
 		IEC_Bus::SetInvertIECInputs(options.InvertIECInputs());

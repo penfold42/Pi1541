@@ -32,6 +32,8 @@ public:
 
 	void Open(u32 width, u32 height, u32 colourDepth);
 
+	void UpdateLayout();
+
 	void ClearArea(u32 x1, u32 y1, u32 x2, u32 y2, RGBA colour);
 	void Clear(RGBA colour);
 
@@ -76,11 +78,6 @@ private:
 	float scaleX;
 	float scaleY;
 
-	int graphHeight;
-	int topGraphArea;
-	int topAtnGraph;
-	int topDatGraph;
-	int topClkGraph;
 };
 
 #endif

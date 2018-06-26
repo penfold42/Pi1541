@@ -870,20 +870,21 @@ void FileBrowser::DisplayLedMotorStatusBar()
 	u32 bgColour = palette[VIC2_COLOUR_INDEX_BLUE];
 
 	u32 x = 0;
-	u32 y = screenMain->ScaleY(STATUS_BAR_POSITION_Y);
+	u32 y = screenMain->GetDriveLedStatusY();
 
 	char bufferOut[128];
 	snprintf(bufferOut, 256, "LED 0 Motor 0 Track 00.0");
-	screenMain->PrintText(false, x, y, bufferOut, RGBA(0, 0, 0, 0xff), RGBA(0xff, 0xff, 0xff, 0xff));
+//	screenMain->PrintText(false, x, y, bufferOut, RGBA(0, 0, 0, 0xff), RGBA(0xff, 0xff, 0xff, 0xff));
+	screenMain->PrintText(true, x, y, bufferOut, RGBA(0, 0, 0, 0xff), RGBA(0xff, 0xff, 0xff, 0xff));
 
 	if (options.GraphIEC())
 	{
 		snprintf(bufferOut, 256, "ATN ?");
-		screenMain->PrintText(false, 0, screenMain->GetTopAtnGraph(), bufferOut, textColour, bgColour);
+		screenMain->PrintText(true, 0, screenMain->GetTopAtnGraph(), bufferOut, textColour, bgColour);
 		snprintf(bufferOut, 256, "DAT ?");
-		screenMain->PrintText(false, 0, screenMain->GetTopDatGraph(), bufferOut, textColour, bgColour);
+		screenMain->PrintText(true, 0, screenMain->GetTopDatGraph(), bufferOut, textColour, bgColour);
 		snprintf(bufferOut, 256, "CLK ?");
-		screenMain->PrintText(false, 0, screenMain->GetTopClkGraph(), bufferOut, textColour, bgColour);
+		screenMain->PrintText(true, 0, screenMain->GetTopClkGraph(), bufferOut, textColour, bgColour);
 	}
 }
 
@@ -907,10 +908,11 @@ void FileBrowser::ShowDeviceAndROM()
 	u32 textColour = RGBA(0, 0, 0, 0xff);
 	u32 bgColour = RGBA(0xff, 0xff, 0xff, 0xff);
 	u32 x = 0; // 43 * 8
-	u32 y = screenMain->ScaleY(STATUS_BAR_POSITION_Y) - 20;
+	u32 y = screenMain->GetDeviceAndRomY();
 
 	snprintf(buffer, 256, "Device %2d %s\r\n", deviceID, roms->ROMNames[roms->currentROMIndex]);
-	screenMain->PrintText(false, x, y, buffer, textColour, bgColour);
+//	screenMain->PrintText(false, x, y, buffer, textColour, bgColour);
+	screenMain->PrintText(true, x, y, buffer, textColour, bgColour);
 }
 
 void FileBrowser::DisplayDiskInfo(DiskImage* diskImage, const char* filenameForIcon)
