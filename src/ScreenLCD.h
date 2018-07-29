@@ -21,6 +21,7 @@
 
 #include "ScreenBase.h"
 #include "SSD1306.h"
+#include "options.h"
 
 class ScreenLCD : public ScreenBase
 {
@@ -32,10 +33,11 @@ public:
 	{
 	}
 
-	void Open(u32 width, u32 height, u32 colourDepth, int BSCMaster, int LCDAddress, int LCDFlip, int LCDType);
+	void Open(u32 width, u32 height, u32 colourDepth, int BSCMaster, int LCDAddress, int LCDFlip, LCD_MODEL LCDType);
 
 	void ClearArea(u32 x1, u32 y1, u32 x2, u32 y2, RGBA colour);
 	void Clear(RGBA colour);
+	void ClearInit(RGBA colour);
 
 	void SetContrast(u8 value);
 
@@ -49,11 +51,14 @@ public:
 
 	void PlotImage(u32* image, int x, int y, int w, int h);
 
+	void PlotRawImage(const u8* image, int x, int y, int w, int h);
+
 	u32 GetFontHeight();
 
 	void SwapBuffers();
+	void RefreshScreen();
 
-	void RefreshRows(u8 start, u8 amountOfRows);
+	void RefreshRows(u32 start, u32 amountOfRows);
 
 private:
 	SSD1306* ssd1306 = 0;

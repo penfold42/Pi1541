@@ -33,22 +33,37 @@ unsigned InputMappings::directDiskSwapRequest = 0;
 
 InputMappings::InputMappings()
 	: keyboardBrowseLCDScreen(false)
+	, insertButtonPressedPrev(false)
+	, insertButtonPressed(false)
+	, enterButtonPressedPrev(false)
+	, enterButtonPressed(false)
 {
 }
 
 bool InputMappings::CheckButtonsBrowseMode()
 {
 	buttonFlags = 0;
-	if (IEC_Bus::GetInputButtonPressed(0))
-		SetButtonFlag(ENTER_FLAG);
-	else if (IEC_Bus::GetInputButtonRepeating(1))
+	//if (IEC_Bus::GetInputButtonPressed(0))
+	//	SetButtonFlag(ENTER_FLAG);
+	//else
+		if (IEC_Bus::GetInputButtonRepeating(1))
 		SetButtonFlag(UP_FLAG);
 	else if (IEC_Bus::GetInputButtonRepeating(2))
 		SetButtonFlag(DOWN_FLAG);
 	else if (IEC_Bus::GetInputButtonPressed(3))
 		SetButtonFlag(BACK_FLAG);
-	else if (IEC_Bus::GetInputButtonPressed(4))
+	//else if (IEC_Bus::GetInputButtonPressed(4))
+	//	SetButtonFlag(INSERT_FLAG);
+
+	insertButtonPressed = !IEC_Bus::GetInputButtonReleased(4);
+	if (insertButtonPressedPrev && !insertButtonPressed)
 		SetButtonFlag(INSERT_FLAG);
+	insertButtonPressedPrev = insertButtonPressed;
+
+	enterButtonPressed = !IEC_Bus::GetInputButtonReleased(0);
+	if (enterButtonPressedPrev && !enterButtonPressed)
+		SetButtonFlag(ENTER_FLAG);
+	enterButtonPressedPrev = enterButtonPressed;
 
 	return buttonFlags != 0;
 }
@@ -170,10 +185,18 @@ bool InputMappings::CheckKeyboardBrowseMode()
 	//	SetKeyboardFlag(PAGEUP_LCD_FLAG);
 	//else if (keyboard->KeyHeld(KEY_END))
 	//	SetKeyboardFlag(PAGEDOWN_LCD_FLAG);
+	else if (keyboard->KeyHeld(KEY_N) && keyboard->KeyEitherAlt() )
+		SetKeyboardFlag(NEWD64_FLAG);
+	else if (keyboard->KeyHeld(KEY_A) && keyboard->KeyEitherAlt() )
+		SetKeyboardFlag(AUTOLOAD_FLAG);
+	else if (keyboard->KeyHeld(KEY_R) && keyboard->KeyEitherAlt() )
+		SetKeyboardFlag(FAKERESET_FLAG);
+	else if (keyboard->KeyHeld(KEY_W) && keyboard->KeyEitherAlt())
+		SetKeyboardFlag(WRITEPROTECT_FLAG);
 	else
 	{
 		unsigned index;
-		for (index = 0; index < 10; ++index)
+		for (index = 0; index < 11; ++index)
 		{
 			unsigned keySetIndexBase = index * 3;
 			if (keyboard->KeyHeld(FileBrowser::SwapKeys[keySetIndexBase]) || keyboard->KeyHeld(FileBrowser::SwapKeys[keySetIndexBase + 1]) || keyboard->KeyHeld(FileBrowser::SwapKeys[keySetIndexBase + 2]))
@@ -197,6 +220,10 @@ void InputMappings::CheckKeyboardEmulationMode(unsigned numberOfImages, unsigned
 			SetKeyboardFlag(PREV_FLAG);
 		else if (keyboard->KeyHeld(KEY_PAGEDOWN))
 			SetKeyboardFlag(NEXT_FLAG);
+		else if (keyboard->KeyHeld(KEY_A) && keyboard->KeyEitherAlt() )
+			SetKeyboardFlag(AUTOLOAD_FLAG);
+		else if (keyboard->KeyHeld(KEY_R) && keyboard->KeyEitherAlt() )
+			SetKeyboardFlag(FAKERESET_FLAG);
 		else if (numberOfImages > 1)
 		{
 			unsigned index;

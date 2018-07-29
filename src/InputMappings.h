@@ -28,14 +28,20 @@
 #define UP_FLAG			(1 << 4)
 #define PAGEUP_FLAG		(1 << 5)
 #define DOWN_FLAG		(1 << 6)
-#define PAGEDOWN_FLAG	(1 << 7)
+#define PAGEDOWN_FLAG		(1 << 7)
 #define SPACE_FLAG		(1 << 8)
 #define BACK_FLAG		(1 << 9)
 #define INSERT_FLAG		(1 << 10)
 #define NUMBER_FLAG		(1 << 11)
 
-#define PAGEDOWN_LCD_FLAG (1 << 12)
-#define PAGEUP_LCD_FLAG (1 << 13)
+#define PAGEDOWN_LCD_FLAG	(1 << 12)
+#define PAGEUP_LCD_FLAG		(1 << 13)
+
+#define NEWD64_FLAG		(1 << 14)
+#define AUTOLOAD_FLAG		(1 << 15)
+#define FAKERESET_FLAG		(1 << 16)
+#define WRITEPROTECT_FLAG	(1 << 17)
+// dont exceed 32!!
 
 class InputMappings : public Singleton<InputMappings>
 {
@@ -46,6 +52,12 @@ protected:
 	unsigned buttonFlags;
 
 	bool keyboardBrowseLCDScreen;
+
+	bool insertButtonPressedPrev;
+	bool insertButtonPressed;
+
+	bool enterButtonPressedPrev;
+	bool enterButtonPressed;
 
 	//inline void SetUartFlag(unsigned flag) { uartFlags |= flag;	}
 	//inline bool UartFlag(unsigned flag) { return (uartFlags & flag) != 0; }
@@ -87,6 +99,16 @@ public:
 	inline bool PrevDisk()
 	{
 		return KeyboardFlag(PREV_FLAG)/* | UartFlag(PREV_FLAG)*/ | ButtonFlag(PREV_FLAG);
+	}
+
+	inline bool AutoLoad()
+	{
+		return KeyboardFlag(AUTOLOAD_FLAG);
+	}
+
+	inline bool FakeReset()
+	{
+		return KeyboardFlag(FAKERESET_FLAG);
 	}
 
 	inline bool BrowseSelect()
@@ -135,6 +157,26 @@ public:
 	inline bool BrowseInsert()
 	{
 		return KeyboardFlag(INSERT_FLAG)/* | UartFlag(INSERT_FLAG)*/ | ButtonFlag(INSERT_FLAG);
+	}
+
+	inline bool BrowseNewD64()
+	{
+		return KeyboardFlag(NEWD64_FLAG);
+	}
+
+	inline bool BrowseAutoLoad()
+	{
+		return KeyboardFlag(AUTOLOAD_FLAG);
+	}
+
+	inline bool BrowseFakeReset()
+	{
+		return KeyboardFlag(FAKERESET_FLAG);
+	}
+
+	inline bool BrowseWriteProtect()
+	{
+		return KeyboardFlag(WRITEPROTECT_FLAG);
 	}
 
 	// Used by the 2 cores so need to be volatile

@@ -19,6 +19,8 @@
 #ifndef OPTIONS_H
 #define OPTIONS_H
 
+#include "types.h"
+
 class TextParser
 {
 public:
@@ -72,16 +74,24 @@ public:
 
 	inline unsigned int I2CBusMaster() const { return i2cBusMaster; }
 	inline unsigned int I2CLcdAddress() const { return i2cLcdAddress; }
+	inline unsigned int I2CScan() const { return i2cScan; }
 	inline unsigned int I2CLcdFlip() const { return i2cLcdFlip; }
 	inline unsigned int I2CLcdOnContrast() const { return i2cLcdOnContrast; }
 	inline unsigned int I2CLcdDimContrast() const { return i2cLcdDimContrast; }
 	inline unsigned int I2CLcdDimTime() const { return i2cLcdDimTime; }
+	inline LCD_MODEL I2CLcdModel() const { return i2cLcdModel; }
+
+	inline const char* GetLcdLogoName() const { return LcdLogoName; }
+
+	inline float ScrollHighlightRate() const { return scrollHighlightRate; }
 
 	// Page up and down will jump a different amount based on the maximum number rows displayed.
 	// Perhaps we should use some keyboard modifier to the the other screen?
 	inline unsigned int KeyboardBrowseLCDScreen() const { return keyboardBrowseLCDScreen; }
 
 	const char* GetLCDName() const { return LCDName; }
+
+	const char* GetAutoBaseName() const { return autoBaseName; }
 
 	static unsigned GetDecimal(char* pString);
 	static float GetFloat(char* pString);
@@ -110,15 +120,22 @@ private:
 
 	unsigned int i2cBusMaster;
 	unsigned int i2cLcdAddress;
+	unsigned int i2cScan;
 	unsigned int i2cLcdFlip;
-	unsigned int i2cLcdOnContrast = 127;
+	unsigned int i2cLcdOnContrast;
 	unsigned int i2cLcdDimContrast;
 	unsigned int i2cLcdDimTime;
+//	unsigned int i2cLcdModel;
+	LCD_MODEL i2cLcdModel = LCD_UNKNOWN;
+
+	float scrollHighlightRate;
 
 	unsigned int keyboardBrowseLCDScreen;
 
 	char starFileName[256];
+	char autoBaseName[256];
 	char LCDName[256];
+	char LcdLogoName[256];
 
 	char autoMountImageName[256];
 	char ROMFontName[256];

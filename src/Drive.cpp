@@ -20,6 +20,16 @@
 #include "m6522.h"
 #include "debug.h"
 
+
+//#define PROFILE 1
+
+#if defined(PROFILE)
+extern "C"
+{
+#include "performance.h"
+}
+#endif
+
 // There is a lot going on even though the emulation code is extremely small.
 // A few counters, shift registers and the occasional logic gate takes a surprisingly small amount of code to implement.
 
@@ -342,7 +352,7 @@ Drive::Drive() : m_pVIA(0)
 
 void Drive::Reset()
 {
-	headTrackPos = 34;		// Start with the head over track 18
+	headTrackPos = 0;		// Start with the head over track 19 (Very later Vorpal ie Cakifornia Games) need to have had the last head movement -ve
 	CLOCK_SEL_AB = 3;		// Track 18 will use speed zone 3 (encoder/decoder (ie UE7Counter) clocked at 1.2307Mhz)
 	UpdateHeadSectorPosition();
 	lastHeadDirection = 0;
@@ -380,14 +390,42 @@ void Drive::DumpTrack(unsigned track)
 void Drive::OnPortOut(void* pThis, unsigned char status)
 {
 	Drive* pDrive = (Drive*)pThis;
+	if (pDrive->motor)
+		pDrive->MoveHead(status & 3);
 	pDrive->motor = (status & 4) != 0;
-	pDrive->MoveHead(status & 3);
 	pDrive->CLOCK_SEL_AB = ((status >> 5) & 3);
 	pDrive->LED = (status & 8) != 0;
 }
 
 bool Drive::Update()
 {
+#if defined(PROFILE)
+	perf_counters_t pct;
+	reset_performance_counters(&pct);
+
+#if defined(RPI2) || defined(RPI3) 
+	pct.num_counters = 6;
+	pct.type[0] = PERF_TYPE_L1I_CACHE;
+	pct.type[1] = PERF_TYPE_L1I_CACHE_REFILL;
+	pct.type[2] = PERF_TYPE_L1D_CACHE;
+	pct.type[3] = PERF_TYPE_L1D_CACHE_REFILL;
+	pct.type[4] = PERF_TYPE_L2D_CACHE_REFILL;
+	pct.type[5] = PERF_TYPE_INST_RETIRED;
+	pct.counter[0] = 100;
+	pct.counter[1] = 101;
+	pct.counter[2] = 102;
+	pct.counter[3] = 103;
+	pct.counter[4] = 104;
+	pct.counter[5] = 105;
+#else
+	pct.num_counters = 2;
+	//pct.type[0] = PERF_TYPE_EVERY_CYCLE;
+	pct.type[0] = PERF_TYPE_I_CACHE_MISS;
+	pct.type[1] = PERF_TYPE_D_CACHE_MISS;
+#endif
+
+#endif
+
 	bool dataReady = false;
 	
 	// When swapping some lame loaders monitor the write protect flag.
@@ -497,5 +535,11 @@ bool Drive::Update()
 		}
 	}
 	m_pVIA->InputCA1(!SO);
+
+#if defined(PROFILE)
+	read_performance_counters(&pct);
+	print_performance_counters(&pct);
+#endif
+
 	return dataReady;
 }

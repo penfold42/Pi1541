@@ -23,14 +23,14 @@
 #include "debug.h"
 #include "ssd_logo.h"
 
-void ScreenLCD::Open(u32 widthDesired, u32 heightDesired, u32 colourDepth, int BSCMaster, int LCDAddress, int LCDFlip, int LCDType)
+void ScreenLCD::Open(u32 widthDesired, u32 heightDesired, u32 colourDepth, int BSCMaster, int LCDAddress, int LCDFlip, LCD_MODEL LCDType)
 {
 	bpp = 1;
 
 	if (widthDesired < 128)
 		widthDesired = 128;
-	if (heightDesired < 64)
-		heightDesired = 64;
+	if (heightDesired < 32)
+		heightDesired = 32;
 	if (widthDesired > 128)
 		widthDesired = 128;
 	if (heightDesired > 64)
@@ -39,13 +39,10 @@ void ScreenLCD::Open(u32 widthDesired, u32 heightDesired, u32 colourDepth, int B
 	width = widthDesired;
 	height = heightDesired;
 
-	ssd1306 = new SSD1306(BSCMaster, LCDAddress, LCDFlip, LCDType);
-	ssd1306->DisplayOn();
-
-	ssd1306->PlotImage(logo_ssd);
-	ssd1306->Plottext(5, 0, "Pi1541", false);
-
+	ssd1306 = new SSD1306(BSCMaster, LCDAddress, width, height, LCDFlip, LCDType);
+	ssd1306->ClearScreen();
 	ssd1306->RefreshScreen();
+	ssd1306->DisplayOn();
 
 	opened = true;
 }
@@ -62,6 +59,14 @@ void ScreenLCD::ScrollArea(u32 x1, u32 y1, u32 x2, u32 y2)
 void ScreenLCD::Clear(RGBA colour)
 {
 	ssd1306->ClearScreen();
+}
+
+void ScreenLCD::ClearInit(RGBA colour)
+{
+	ssd1306->InitHardware();
+	ssd1306->ClearScreen();
+	ssd1306->SetContrast(ssd1306->GetContrast());
+	ssd1306->DisplayOn();
 }
 
 void ScreenLCD::SetContrast(u8 value)
@@ -84,10 +89,18 @@ void ScreenLCD::PlotImage(u32* image, int x, int y, int w, int h)
 {
 }
 
+void ScreenLCD::PlotRawImage(const u8* image, int x, int y, int w, int h)
+{
+	if (x==0 && y==0 && w==128 && h==64)
+	{
+		ssd1306->PlotImage(image);
+	}
+}
+
 u32 ScreenLCD::PrintText(bool petscii, u8 fontPx, u32 x, u32 y, char *ptr, RGBA TxtColour, RGBA BkColour, bool measureOnly, u32* width, u32* height)
 {
 	int len = 0;
-	ssd1306->Plottext(x >> 3, y >> 4, ptr, (BkColour & 0xffffff) != 0);
+	ssd1306->PlotText(x >> 3, y >> 4, ptr, (BkColour & 0xffffff) != 0);
 	return len;
 }
 
@@ -101,12 +114,18 @@ u32 ScreenLCD::GetFontHeight()
 	return 16;
 }
 
+void ScreenLCD::RefreshScreen()
+{
+	ssd1306->RefreshScreen();
+}
+
 void ScreenLCD::SwapBuffers()
 {
 	ssd1306->RefreshScreen();
 }
 
-void ScreenLCD::RefreshRows(u8 start, u8 amountOfRows)
+void ScreenLCD::RefreshRows(u32 start, u32 amountOfRows)
 {
-	ssd1306->RefreshRows(start, amountOfRows);
+	if (ssd1306)
+		ssd1306->RefreshRows(start, amountOfRows);
 }
